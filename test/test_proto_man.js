@@ -84,9 +84,9 @@ proto_man.reg_encoder(1, 1, encode_cmd_1_1)
 proto_man.reg_decoder(1, 1, decode_cmd_1_1)
     //end
 
-let proto_cmd_buf = proto_man.encode_cmd(netbus.PROTO_BUF, 1, 1, data)
+let proto_cmd_buf = proto_man.encode_cmd(proto_man.PROTO_BUF, 1, 1, data)
 log.info(proto_cmd_buf)
 log.error(proto_cmd_buf.length)
-let cmd = proto_man.decode_cmd(netbus.PROTO_BUF, proto_cmd_buf)
+let cmd = proto_man.decode_cmd(proto_man.PROTO_BUF, proto_cmd_buf)
 log.info(cmd)
     // log.error(cmd.length)

@@ -1,0 +1,9 @@
+SERVICE_MANAGER
+1,所有的服务的管理模块，所有的服务都注册在这里
+2，netbud收到数据，玩家掉线，都进入他，通知对应的服务；
+3，提供服务模块注册函数，编写模板服务编写
+4，调用proto_man.decode_cmd()来解码命令；
+5，将命令根据stype，分发给对应的service模块；
+6，将命令根据stype，分发给对应的service模块；
+7，告诉所有的service链接丢失；
+8，测试tcp，ws

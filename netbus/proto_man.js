@@ -1,13 +1,22 @@
 let netbus = require("./netbus.js")
 let log = require('../utils/log.js')
-    /*规定
-    1，服务号和命令号不能为零 data部分不能为空
-    2，服务号和命令号大小不能超过2个字节的整数
-    3，buf协议里面2个字节来存放服务号，命令号;0开始的服务号，1开始的命令号
-    4，加密解密
-    5, 服务号和命令号都用小尾
-    */
-let proto_man = {};
+    //协议管理
+
+/*规定
+1，服务号和命令号不能为零 data部分不能为空
+2，服务号和命令号大小不能超过2个字节的整数
+3，buf协议里面2个字节来存放服务号，命令号;0开始的服务号，1开始的命令号
+4，加密解密
+5, 服务号和命令号都用小尾
+*/
+let proto_man = {
+    PROTO_JSON: 1,
+    PROTO_BUF: 2,
+    encode_cmd: encode_cmd,
+    decode_cmd: decode_cmd,
+    reg_decoder: reg_buf_decoder,
+    reg_encoder: reg_buf_encoder
+};
 
 //buf协议的编码/解码管理   stype,ctype -->encoder/decoder
 //解码器  buf协议的所有解码函数
@@ -58,7 +67,7 @@ function json_decode(cmd_json) {
 //返回后是一段编码过的数据
 function encode_cmd(proto_type, stype, cmd_type, body) {
     let buf = null;
-    if (proto_type == netbus.PROTO_JSON) {
+    if (proto_type == proto_man.PROTO_JSON) {
         buf = _json_encode(stype, cmd_type, body)
             // return encrypt_cmd_buf(str)
     } else {
@@ -86,9 +95,13 @@ function encode_cmd(proto_type, stype, cmd_type, body) {
 function decode_cmd(proto_type, str_or_buf) {
     let str_or_bufs = decrypt_cmd_buf(str_or_buf)
 
-    if (proto_type == netbus.PROTO_JSON) {
+    if (proto_type == proto_man.PROTO_JSON) {
         log.info(str_or_bufs)
         return json_decode(str_or_bufs)
+    }
+    //验证合法性
+    if (str_or_buf.length < 4) {
+        return null
     }
     let cmd = null;
     let stype = str_or_bufs.readUInt16LE(0)
@@ -128,8 +141,5 @@ function reg_buf_decoder(stype, ctype, decode_func) {
     }
     decoders[key] = decode_func
 }
-proto_man.encode_cmd = encode_cmd
-proto_man.decode_cmd = decode_cmd
-proto_man.reg_decoder = reg_buf_decoder
-proto_man.reg_encoder = reg_buf_encoder
+
 module.exports = proto_man
