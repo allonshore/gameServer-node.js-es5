@@ -219,7 +219,7 @@ function ws_add_client_session_event(session, proto_type_z) {
 
     // message 事件, data已经是根据websocket协议解码开来的原始数据；
     session.on("message", function(data) {
-        console.log("session", session.proto_type)
+        console.log("session", session.proto_type, data)
         if (session.proto_type == proto_man.PROTO_JSON) {
             if (!isString(data)) {
                 log.info(isString(data))
@@ -230,6 +230,7 @@ function ws_add_client_session_event(session, proto_type_z) {
             on_session_rece_cmd(session, data)
         } else {
             if (!Buffer.isBuffer(data)) {
+                log.info(data)
                 session_close(session)
                 return false
             }

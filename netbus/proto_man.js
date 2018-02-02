@@ -10,20 +10,22 @@ let log = require('../utils/log.js')
 5, 服务号和命令号都用小尾
 */
 let proto_man = {
-    PROTO_JSON: 1,
-    PROTO_BUF: 2,
-    encode_cmd: encode_cmd,
-    decode_cmd: decode_cmd,
-    reg_decoder: reg_buf_decoder,
-    reg_encoder: reg_buf_encoder
+    PROTO_JSON: 1, //协议类型 json
+    PROTO_BUF: 2, //协议类型  buf
+    encode_cmd: encode_cmd, //编码器
+    decode_cmd: decode_cmd, //解码器
+    reg_decoder: reg_buf_decoder, //解码器注册函数
+    reg_encoder: reg_buf_encoder //编码器注册函数
 };
 
 //buf协议的编码/解码管理   stype,ctype -->encoder/decoder
 //解码器  buf协议的所有解码函数
+//解码中心
 let decoders = {
 
     }
     //编码器  buf协议的所有编码函数
+    //编码中心
 let encoders = {
 
     }
@@ -48,7 +50,14 @@ function _json_encode(stype, ctype, body) {
 }
 //解码函数
 function json_decode(cmd_json) {
-    let cmd = JSON.parse(cmd_json)
+    let cmd = null
+        //避免报错直接挂掉服务器
+    try {
+        cmd = JSON.parse(cmd_json)
+    } catch (e) {
+
+    }
+
     console.log(cmd)
     if (!cmd || !cmd[0] ||
         !cmd[1] ||
@@ -74,6 +83,7 @@ function encode_cmd(proto_type, stype, cmd_type, body) {
         //buf协议
         log.info(proto_type, stype, cmd_type, body)
         let key = get_key(stype, cmd_type)
+        log.info(key)
         if (!encoders[key]) {
             console.log(1)
             return null
@@ -85,6 +95,7 @@ function encode_cmd(proto_type, stype, cmd_type, body) {
         buf = encrypt_cmd_buf(buf)
     }
     //end
+    log.info(buf)
     return buf;
 }
 //proto_type 协议类型

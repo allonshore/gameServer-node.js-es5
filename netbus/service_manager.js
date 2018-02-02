@@ -1,6 +1,6 @@
 let log = require("../utils/log.js")
 let proto_man = require("./proto_man")
-
+    //服务中心
 let service_modules = {
 
     }
@@ -11,6 +11,7 @@ function register_service(stype, service) {
     }
 
     service_modules[stype] = service
+        //服务注册成功 调用初始化 
     service.init()
 }
 
@@ -49,10 +50,11 @@ function on_client_lost_connect(session) {
 
     }
 }
+//服务管理中心
 let service_manager = {
-    on_client_lost_connect: on_client_lost_connect,
-    on_recv_client_cmd: on_recv_client_cmd,
-    register_service: register_service
+    on_client_lost_connect: on_client_lost_connect, //客户断线链接处理器
+    on_recv_client_cmd: on_recv_client_cmd, //接收客户端命令字
+    register_service: register_service //服务注册器
 }
 
 module.exports = service_manager
