@@ -1,3 +1,4 @@
+require("../init.js")
 let netbus = require("../netbus/netbus.js")
 let proto_man = require("../netbus/proto_man.js")
 

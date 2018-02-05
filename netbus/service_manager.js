@@ -17,7 +17,9 @@ function register_service(stype, service) {
 
 
 function on_recv_client_cmd(session, str_or_buf) {
-    //更具我们收到的数据解码我们的命令
+    //更具我们收到的数据解密
+    str_or_buf = proto_man.decrypt_cmd(str_or_buf)
+        //更具我们收到的数据解码我们的命令
     let cmd = proto_man.decode_cmd(session.proto_type, str_or_buf)
         // 无效的回false 无效链接 一定关闭
     if (!cmd) {

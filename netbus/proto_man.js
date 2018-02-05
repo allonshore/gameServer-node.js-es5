@@ -15,7 +15,9 @@ let proto_man = {
     encode_cmd: encode_cmd, //编码器
     decode_cmd: decode_cmd, //解码器
     reg_decoder: reg_buf_decoder, //解码器注册函数
-    reg_encoder: reg_buf_encoder //编码器注册函数
+    reg_encoder: reg_buf_encoder, //编码器注册函数
+    decrypt_cmd: decrypt_cmd,
+    encrypt_cmd: encrypt_cmd
 };
 
 //buf协议的编码/解码管理   stype,ctype -->encoder/decoder
@@ -30,11 +32,11 @@ let encoders = {
 
     }
     //加密函数
-function encrypt_cmd_buf(str_or_buf) {
+function encrypt_cmd(str_or_buf) {
     return str_or_buf
 }
 //解密函数
-function decrypt_cmd_buf(str_or_buf) {
+function decrypt_cmd(str_or_buf) {
     return str_or_buf
 }
 
@@ -88,12 +90,12 @@ function encode_cmd(proto_type, stype, cmd_type, body) {
             console.log(1)
             return null
         }
-        buf = encoders[key](body)
+        buf = encoders[key](stype, ctype, body)
     }
     //空不加密
-    if (buf) {
-        buf = encrypt_cmd_buf(buf)
-    }
+    // if (buf) {
+    //     buf = encrypt_cmd_buf(buf)
+    // }
     //end
     log.info(buf)
     return buf;
@@ -104,7 +106,7 @@ function encode_cmd(proto_type, stype, cmd_type, body) {
 //解码函数
 //返回的是一段解码好的数据
 function decode_cmd(proto_type, str_or_buf) {
-    let str_or_bufs = decrypt_cmd_buf(str_or_buf)
+    let str_or_bufs = str_or_buf
 
     if (proto_type == proto_man.PROTO_JSON) {
         log.info(str_or_bufs)
