@@ -5,6 +5,7 @@ let service = {
     //初始服务初始化的时候调用
     init: function() {
         log.info(this.name, "service init")
+        
     },
     //每个服务收到数据的时候调用
     on_recv_player_cmd: function(session, ctype, body) {

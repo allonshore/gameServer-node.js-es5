@@ -1,5 +1,5 @@
-var net = require("net");
-var tcppkg = require("../netbus/tcppkg");
+let net = require("net");
+let tcppkg = require("../netbus/tcppkg");
 let proto_man = require("../netbus/proto_man")
 var sock = net.connect({
     port: 6080,
